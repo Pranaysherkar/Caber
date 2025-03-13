@@ -37,3 +37,37 @@ The request body should be a JSON object with the following fields:
     }
 }
 ```
+
+## Endpoint: `/users/login`
+
+### Method: POST
+
+### Description
+This endpoint allows an existing user to log in by providing their email and password. The endpoint validates the input data and returns a JWT token if the credentials are valid.
+
+### Request Body
+The request body should be a JSON object with the following fields:
+
+- `email` (string, required): The user's email address. Must be a valid email format.
+- `password` (string, required): The user's password. Must be at least 6 characters long.
+
+### Example Request
+```json
+{
+    "email": "john.doe@example.com",
+    "password": "password123"
+}
+```
+
+### Example Response
+```json
+{
+    "token": "your_jwt_token",
+    "user": {
+        "_id": "user_id",
+        "firstname": "John",
+        "lastname": "Doe",
+        "email": "john.doe@example.com"
+    }
+}
+```
