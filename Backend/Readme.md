@@ -71,3 +71,52 @@ The request body should be a JSON object with the following fields:
     }
 }
 ```
+
+## Endpoint: `/users/profile`
+
+### Method: GET
+
+### Description
+This endpoint allows a logged-in user to retrieve their profile information. The user must provide a valid JWT token.
+
+### Request Headers
+- `Authorization` (string, required): The JWT token in the format `Bearer <token>`.
+
+### Example Request
+```
+GET /users/profile
+Authorization: Bearer your_jwt_token
+```
+
+### Example Response
+```json
+{
+    "_id": "user_id",
+    "firstname": "John",
+    "lastname": "Doe",
+    "email": "john.doe@example.com"
+}
+```
+
+## Endpoint: `/users/logout`
+
+### Method: GET
+
+### Description
+This endpoint allows a logged-in user to log out by invalidating their JWT token. The user must provide a valid JWT token.
+
+### Request Headers
+- `Authorization` (string, required): The JWT token in the format `Bearer <token>`.
+
+### Example Request
+```
+GET /users/logout
+Authorization: Bearer your_jwt_token
+```
+
+### Example Response
+```json
+{
+    "message": "Successfully logged out"
+}
+```
