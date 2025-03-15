@@ -120,3 +120,61 @@ Authorization: Bearer your_jwt_token
     "message": "Successfully logged out"
 }
 ```
+
+# Captain Registration API
+
+## Endpoint: `/captains/register`
+
+### Method: POST
+
+### Description
+This endpoint allows a new captain to register by providing their personal details and vehicle information. The endpoint validates the input data and creates a new captain in the database if the data is valid.
+
+### Request Body
+The request body should be a JSON object with the following fields:
+
+- `firstname` (string, required): The captain's first name. Must be at least 2 characters long.
+- `lastname` (string, optional): The captain's last name. Must be at least 2 characters long.
+- `email` (string, required): The captain's email address. Must be a valid email format.
+- `password` (string, required): The captain's password. Must be at least 6 characters long.
+- `vehicle` (object, required): An object containing the vehicle details:
+  - `color` (string, required): The vehicle's color. Must be at least 3 characters long.
+  - `plate` (string, required): The vehicle's plate number. Must be at least 3 characters long.
+  - `capacity` (integer, required): The vehicle's capacity. Must be at least 1.
+  - `vehicletype` (string, required): The vehicle type. Must be one of `car`, `motorcycle`, or `auto`.
+
+### Example Request
+```json
+{
+    "firstname": "John",
+    "lastname": "Doe",
+    "email": "john.doe@example.com",
+    "password": "password123",
+    "vehicle": {
+        "color": "Red",
+        "plate": "ABC1234",
+        "capacity": 4,
+        "vehicletype": "car"
+    }
+}
+```
+
+### Example Response
+```json
+{
+    "token": "your_jwt_token",
+    "captain": {
+        "_id": "captain_id",
+        "firstname": "John",
+        "lastname": "Doe",
+        "email": "john.doe@example.com",
+        "vehicle": {
+            "color": "Red",
+            "plate": "ABC1234",
+            "capacity": 4,
+            "vehicletype": "car"
+        }
+    }
+}
+```
+
