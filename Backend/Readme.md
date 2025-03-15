@@ -178,3 +178,89 @@ The request body should be a JSON object with the following fields:
 }
 ```
 
+# Captain Authentication API
+
+This API handles authentication for captains, including login, profile retrieval, and logout.
+
+
+## Authentication Endpoints
+
+### 1. Captain Login
+**Endpoint:**
+```
+POST /captains/login
+```
+**Description:** This endpoint allows a captain to log in by providing their email and password. If the credentials are valid, a JWT token is returned.
+
+**Request Body:**
+```json
+{
+  "email": "captain@example.com",
+  "password": "password123"
+}
+```
+
+**Response:**
+```json
+{
+  "token": "your_jwt_token",
+  "captain": {
+    "_id": "captain_id",
+    "firstname": "John",
+    "lastname": "Doe",
+    "email": "captain@example.com"
+  }
+}
+```
+
+---
+
+### 2. Captain Profile
+**Endpoint:**
+```
+GET /captains/profile
+```
+**Description:** This endpoint allows a logged-in captain to retrieve their profile information. The captain must provide a valid JWT token.
+
+**Headers:**
+```
+Authorization: Bearer <jwt-token>
+```
+
+**Response:**
+```json
+{
+  "_id": "captain_id",
+  "firstname": "John",
+  "lastname": "Doe",
+  "email": "captain@example.com",
+  "vehicle": {
+    "color": "Red",
+    "plate": "ABC1234",
+    "capacity": 4,
+    "vehicletype": "car"
+  }
+}
+```
+
+---
+
+### 3. Captain Logout
+**Endpoint:**
+```
+GET /captains/logout
+```
+**Description:** This endpoint allows a logged-in captain to log out by invalidating their JWT token.
+
+**Headers:**
+```
+Authorization: Bearer <jwt-token>
+```
+
+**Response:**
+```json
+{
+  "message": "Successfully logged out"
+}
+```
+
