@@ -1,25 +1,36 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Logo from "../components/Logo";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import {UserDataContext} from "../context/UserContext";
 
 const UserSignup = () => {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [newUserdata, setNewUserdata] = useState(null);
+  const [user, setUser] = useContext(UserDataContext);
+  const navigate = useNavigate();
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
-    const newData = { email, password, firstname, lastname };
-    setNewUserdata(newData);
-    console.log(newUserdata);
+    const newUser = { email, password, firstname, lastname };
+    const response = await axios.post(
+      `${import.meta.env.VITE_BASE_URL}/users/register`,
+      newUser
+    );
+    if (response.status === 201) {
+      const data = response.data
+      setUser(data.user);
+      localStorage.setItem('token',data.token)
+      navigate('/home')      
+    }
     setFirstname("");
     setLastname("");
     setEmail("");
     setPassword("");
-    console.log(newData);
   };
+
   return (
     <div className="flex flex-col justify-between h-screen overflow-hidden">
       <Logo />
@@ -86,7 +97,7 @@ const UserSignup = () => {
             type="submit"
             className="w-full text-base mb-2 font-semibold bg-black text-white px-4 py-2 rounded"
           >
-            Login
+            Create an Account
           </button>
         </form>
         <p className="text-center text-sm">
