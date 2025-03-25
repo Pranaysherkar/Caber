@@ -19,17 +19,17 @@ const WaitingForDriver = ({ waitingForDriver}) => {
 
       <div className="flex flex-col items-center gap-6">
         {/* Driver & Vehicle Details */}
-        <div className="flex items-center gap-6 bg-gray-100 p-4 rounded-lg shadow-md w-full">
+        <div className="flex items-center gap-16 bg-gray-100 p-4 rounded-lg shadow-md w-full">
           {/* Vehicle Image */}
           <img
-            className="h-20 w-20 object-cover rounded-lg shadow-md"
+            className="h-20 w-28 object-cover rounded-lg shadow-md"
             src="/Comfort.webp"
             alt="Vehicle"
           />
           {/* Driver Details */}
           <div className="flex flex-col">
             <h2 className="font-bold text-lg">Pranay</h2>
-            <h4 className="text-gray-700">MH 46 D 0358</h4>
+            <h4 className="text-gray-700 font-medium">MH 46 D 0358</h4>
             <p className="text-sm text-gray-600">Toyota Innova Crysta</p>
           </div>
         </div>
