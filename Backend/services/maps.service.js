@@ -24,3 +24,45 @@ module.exports.getAddressCoordinates = async (address) => {
         throw error;
     }
 };
+
+module.exports.getDistanceTime = async (origin, destination) => {
+    if(!origin || !destination) {
+        throw new Error('Origin and destination are required.');
+    }
+    const apiKey = process.env.GO_MAPS_API ;
+    const response = await axios.get(`https://maps.gomaps.pro/maps/api/distancematrix/json`, {
+        params: {
+            origins: origin,
+            destinations: destination,
+            key: apiKey
+        }
+    });
+    if (response.data && response.data.rows && response.data.rows.length > 0) {
+        const element = response.data.rows[0].elements[0];
+        return {
+            distance: element.distance.text,
+            duration: element.duration.text
+        };
+    } else {
+        throw new Error('No results found for the given origin and destination.');
+    }   
+}
+
+module.exports.getAutoCompleteSuggestions = async (input) => {
+    if(!input) {
+        throw new Error('Input is required.');
+    }
+
+    const apiKey = process.env.GO_MAPS_API ;
+    const response = await axios.get(`https://maps.gomaps.pro/maps/api/place/autocomplete/json`, {
+        params:{
+            input: input,
+            key: apiKey
+        }
+    })
+    if (response.data && response.data.predictions) {
+        return response.data.predictions.map(prediction => prediction.description);
+    } else {
+        throw new Error('No suggestions found for the given input.');
+    }
+}
