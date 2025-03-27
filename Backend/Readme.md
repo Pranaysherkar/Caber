@@ -264,3 +264,158 @@ Authorization: Bearer <jwt-token>
 }
 ```
 
+# Maps API
+
+## Endpoint: `/maps/get-coordinates`
+
+### Method: GET
+
+### Description
+This endpoint retrieves the latitude and longitude of a given address.
+
+### Request Headers
+- `Authorization` (string, required): The JWT token in the format `Bearer <token>`.
+
+### Query Parameters
+- `address` (string, required): The address to get coordinates for. Must be at least 3 characters long.
+
+### Example Request
+```
+GET /maps/get-coordinates?address=123+Main+Street
+Authorization: Bearer your_jwt_token
+```
+
+### Example Response
+```json
+{
+    "ltd": 37.7749,
+    "lang": -122.4194
+}
+```
+
+---
+
+## Endpoint: `/maps/get-distance-time`
+
+### Method: GET
+
+### Description
+This endpoint retrieves the distance and time between two locations.
+
+### Request Headers
+- `Authorization` (string, required): The JWT token in the format `Bearer <token>`.
+
+### Query Parameters
+- `origin` (string, required): The starting location. Must be at least 3 characters long.
+- `destination` (string, required): The destination location. Must be at least 3 characters long.
+
+### Example Request
+```
+GET /maps/get-distance-time?origin=123+Main+Street&destination=456+Elm+Street
+Authorization: Bearer your_jwt_token
+```
+
+### Example Response
+```json
+{
+    "distance": "10 km",
+    "duration": "15 mins"
+}
+```
+
+---
+
+## Endpoint: `/maps/get-suggestions`
+
+### Method: GET
+
+### Description
+This endpoint provides autocomplete suggestions for a given input.
+
+### Request Headers
+- `Authorization` (string, required): The JWT token in the format `Bearer <token>`.
+
+### Query Parameters
+- `input` (string, required): The input string to get suggestions for. Must be at least 3 characters long.
+
+### Example Request
+```
+GET /maps/get-suggestions?input=Main
+Authorization: Bearer your_jwt_token
+```
+
+### Example Response
+```json
+[
+    "123 Main Street, San Francisco, CA",
+    "Main Avenue, Los Angeles, CA",
+    "Main Road, New York, NY"
+]
+```
+
+---
+
+# Ride API
+
+## Endpoint: `/rides/create`
+
+### Method: POST
+
+### Description
+This endpoint allows a user to create a new ride.
+
+### Request Headers
+- `Authorization` (string, required): The JWT token in the format `Bearer <token>`.
+
+### Request Body
+```json
+{
+    "origin": "123 Main Street",
+    "destination": "456 Elm Street",
+    "vehicleType": "car"
+}
+```
+
+### Example Response
+```json
+{
+    "_id": "ride_id",
+    "user": "user_id",
+    "origin": "123 Main Street",
+    "destination": "456 Elm Street",
+    "vehicleType": "car",
+    "fare": 250.00,
+    "otp": "123456",
+    "status": "pending"
+}
+```
+
+---
+
+## Endpoint: `/rides/get-fare`
+
+### Method: GET
+
+### Description
+This endpoint calculates the fare for a ride based on the origin, destination.
+
+### Request Headers
+- `Authorization` (string, required): The JWT token in the format `Bearer <token>`.
+
+### Query Parameters
+- `origin` (string, required): The starting location. Must be at least 3 characters long.
+- `destination` (string, required): The destination location. Must be at least 3 characters long.
+
+### Example Request
+```
+GET /rides/get-fare?origin=123+Main+Street&destination=456+Elm+Street&vehicleType=car
+Authorization: Bearer your_jwt_token
+```
+
+### Example Response
+```json
+{
+    "fare": 250.00
+}
+```
+

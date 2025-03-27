@@ -1,9 +1,14 @@
 const rideModel = require('../models/ride.model');
 const mapsService = require('./maps.service');
+const crypto = require('crypto'); // we use crypto to generate OTPs
 
 async function getFare(origin, destination, vehicleType) {
     if (!origin || !destination) {
         throw new Error('Origin and destination are required.');
+    }
+
+    if (!['car', 'motorcycle', 'auto'].includes(vehicleType)) {
+        throw new Error('Invalid vehicle type.'); // Ensure valid vehicleType
     }
 
     const distanceTime = await mapsService.getDistanceTime(origin, destination);
@@ -31,10 +36,10 @@ async function getFare(origin, destination, vehicleType) {
             fare = distance * 16 + duration * 2; // ₹16 per km + ₹2 per minute
             break;
         case 'motorcycle':
-            fare = distance * 8 + duration * 1; // ₹8 per km + ₹1 per minute
+            fare = distance * 5 + duration * 1; // ₹8 per km + ₹1 per minute
             break;
         case 'auto':
-            fare = distance * 10 + duration * 1.5; // ₹10 per km + ₹1.5 per minute
+            fare = distance * 9 + duration * 1.5; // ₹10 per km + ₹1.5 per minute
             break;
         default:
             throw new Error('Invalid vehicle type.');
@@ -42,6 +47,18 @@ async function getFare(origin, destination, vehicleType) {
 
     return fare;
 }
+
+module.exports.getFare = getFare;
+
+//OTP generation function
+function getOtp(num) {
+    if (!num || typeof num !== 'number' || num <= 0) {
+        throw new Error('Invalid OTP length.');
+    }
+    const otp = crypto.randomInt(Math.pow(10, num - 1), Math.pow(10, num)).toString();
+    return otp;
+}
+
 
 module.exports.createRide = async ({ user, origin, destination, vehicleType }) => {
     if (!user || !origin || !destination || !vehicleType) {
@@ -55,6 +72,7 @@ module.exports.createRide = async ({ user, origin, destination, vehicleType }) =
         origin,
         destination,
         vehicleType,
+        otp:getOtp(6), // Generate 4-digit OTP
         fare
     });
 

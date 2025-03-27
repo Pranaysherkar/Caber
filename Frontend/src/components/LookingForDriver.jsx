@@ -3,7 +3,13 @@ import { motion } from "framer-motion";
 import { FaLocationDot } from "react-icons/fa6";
 import { RiUserLocationFill } from "react-icons/ri";
 import { HiCurrencyRupee } from "react-icons/hi2";
-const LookingForDriver = ({vehicleFound}) => {
+const LookingForDriver = ({
+  vehicleFound,
+  fare,
+  pickup,
+  destination,
+  vehicleType,
+}) => {
   return (
     <motion.div
       initial={{ y: "100%" }}
@@ -20,7 +26,13 @@ const LookingForDriver = ({vehicleFound}) => {
         {/* Vehicle Image */}
         <img
           className="h-32 object-contain rounded-lg shadow-md"
-          src="/Comfort.webp"
+          src={
+            vehicleType === "car"
+              ? "/Comfort.webp"
+              : vehicleType === "auto"
+              ? "/TukTuk.webp"
+              : "/Moto.webp"
+          }
           alt="Vehicle"
         />
 
@@ -31,7 +43,10 @@ const LookingForDriver = ({vehicleFound}) => {
             <FaLocationDot className="text-2xl text-blue-500" />
             <div>
               <h3 className="font-bold text-lg">Pickup Location</h3>
-              <p className="text-sm text-gray-600">56/11-A, Example Street</p>
+              <p className="text-sm text-gray-600 capitalize">
+                {" "}
+                {pickup.length > 30 ? pickup.substring(0, 30) + "..." : pickup}
+              </p>
             </div>
           </div>
 
@@ -40,7 +55,11 @@ const LookingForDriver = ({vehicleFound}) => {
             <RiUserLocationFill className="text-2xl text-blue-400" />
             <div>
               <h3 className="font-bold text-lg">Drop Location</h3>
-              <p className="text-sm text-gray-600">XYZ Avenue, Destination</p>
+              <p className="text-sm text-gray-600 capitalize">
+                {destination.length > 30
+                  ? destination.substring(0, 30) + "..."
+                  : destination}{" "}
+              </p>{" "}
             </div>
           </div>
 
@@ -48,12 +67,14 @@ const LookingForDriver = ({vehicleFound}) => {
           <div className="flex items-center gap-4 my-3 bg-gray-100 p-3 rounded-lg shadow-sm">
             <HiCurrencyRupee className="text-2xl text-green-500" />
             <div>
-              <h3 className="font-bold text-lg">₹193.00</h3>
+              <h3 className="font-bold text-lg">
+                {" "}
+                ₹{fare?.[vehicleType] ? fare[vehicleType].toFixed(2) : "N/A"}
+              </h3>
               <p className="text-sm text-gray-600">Cash, UPI, Netbanking</p>
             </div>
           </div>
         </div>
-
       </div>
     </motion.div>
   );
