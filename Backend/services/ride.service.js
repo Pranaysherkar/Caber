@@ -14,19 +14,18 @@ async function getFare(origin, destination, vehicleType) {
     const distanceTime = await mapsService.getDistanceTime(origin, destination);
 
     // Extract numbers from distance: "149 km" or duration: "3 hours 2 mins"
-    let distanceMatch = distanceTime.distance.match(/\d+/g);  
-    let durationMatch = distanceTime.duration.match(/\d+/g);  
+    let distanceMatch = distanceTime.distance.replace(/,/g, '').match(/\d+/g);
+    let durationMatch = distanceTime.duration.match(/\d+/g);
 
     if (!distanceMatch || !durationMatch) {
         throw new Error('Invalid distance or duration from maps service.');
     }
-
     // Convert extracted values to numbers
-    let distance = parseFloat(distanceMatch[0]); 
+    let distance = parseFloat(distanceMatch.join('')); // Handles large numbers correctly
 
     // Convert hours to minutes if present
     let duration = parseFloat(durationMatch[0]) * 60; // Convert hours to minutes
-    if (durationMatch[1]) { 
+    if (durationMatch[1]) {
         duration += parseFloat(durationMatch[1]); // Add extra minutes
     }
 
@@ -64,7 +63,7 @@ module.exports.createRide = async ({ user, origin, destination, vehicleType }) =
     if (!user || !origin || !destination || !vehicleType) {
         throw new Error('All fields are required.');
     }
-    
+
     const fare = await getFare(origin, destination, vehicleType);
 
     const ride = await rideModel.create({
@@ -72,7 +71,7 @@ module.exports.createRide = async ({ user, origin, destination, vehicleType }) =
         origin,
         destination,
         vehicleType,
-        otp:getOtp(6), // Generate 4-digit OTP
+        otp: getOtp(6), // Generate 4-digit OTP
         fare
     });
 
