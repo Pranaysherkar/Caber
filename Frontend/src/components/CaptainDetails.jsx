@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { RiPinDistanceLine } from "react-icons/ri";
 import { GrNotes } from "react-icons/gr";
 import { HiCurrencyRupee } from "react-icons/hi2";
 import { IoTimerOutline } from "react-icons/io5";
+import { CaptainDataContext } from "../context/CaptainContext";
 
 const CaptainDetails = () => {
+  const { captain } = useContext(CaptainDataContext);
   return (
     <div className="h-[50%] w-full bg-white p-5 flex flex-col justify-between gap-4 shadow-2xl rounded-t-3xl">
       <h3 className="text-xl font-bold px-1 shadow-md">Captain's Profile</h3>
@@ -19,15 +21,27 @@ const CaptainDetails = () => {
 
         {/* Driver Info */}
         <div className="flex flex-col flex-grow">
-          <h2 className="font-semibold text-base">Pranay</h2>
-          <p className="text-xs text-gray-700">MH 46 D 0358</p>
-          <p className="text-xs text-gray-500">Toyota Innova Crysta</p>
+          <h2 className="font-semibold text-base capitalize">
+            {captain.firstname}
+          </h2>
+          <p className="text-xs text-gray-700 capitalize">
+            {captain.vehicle.plate}
+          </p>
+          <p className="text-xs text-gray-500 capitalize">
+            {captain.vehicle.vehicletype}
+          </p>
         </div>
 
         {/* Vehicle Image */}
         <img
-          className="h-14 w-28 object-cover rounded-lg shadow-md"
-          src="/Comfort.webp"
+          className="h-14 w-28 object-contain rounded-lg shadow-md"
+          src={
+            captain.vehicle.vehicletype === "car"
+              ? "/Comfort.webp"
+              : captain.vehicle.vehicletype === "motorcycle"
+              ? "/Moto.jpg"
+              : "/TukTuk.webp"
+          }
           alt="Vehicle"
         />
       </div>

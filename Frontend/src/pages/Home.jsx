@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import Logo from "../components/Logo";
 import { IoIosArrowDown } from "react-icons/io";
@@ -8,6 +8,8 @@ import VehiclePanel from "../components/VehiclePanel";
 import ConfirmedRide from "../components/ConfirmedRide";
 import LookingForDriver from "../components/LookingForDriver";
 import WaitingForDriver from "../components/WaitingForDriver";
+import { SocketContext } from "../context/SocketContext";
+import { UserDataContext } from "../context/UserContext";
 
 const Home = () => {
   const [pickup, setPickup] = useState("");
@@ -21,6 +23,15 @@ const Home = () => {
   const [activeField, setActiveField] = useState(""); // Tracks which field is active
   const [fare, setFare] = useState({});
   const [vehicleType, setVehicleType] = useState(null);
+  const { socket } = useContext(SocketContext);
+  const { user } = useContext(UserDataContext);
+
+  useEffect(() => {
+    console.log(user.user._id);
+    console.log(user);
+        socket.emit("join", {userType:"user",userId:user.user._id});
+
+  }, [user]);
 
   const fetchSuggestions = async (query) => {
     try {

@@ -5,7 +5,7 @@ import axios from "axios";
 
 export const UserProtectedWrapper = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("token")); // Store token in state
-  const [user, setUser] = useContext(UserDataContext);
+  const {user, setUser} = useContext(UserDataContext);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   useEffect(() => {
@@ -23,7 +23,8 @@ export const UserProtectedWrapper = ({ children }) => {
       })
       .then((response) => {
         if (response.status === 200) {
-          setUser(response.data.user);
+          setUser(response.data);
+          setLoading(false);
         }
       })
       .catch((err) => {
@@ -36,6 +37,12 @@ export const UserProtectedWrapper = ({ children }) => {
         setLoading(false);
       });
   }, [token, navigate, setUser]);
+  
+  if (loading) {
+    return (
+        <div>Loading...</div>
+    )
+}
 
   return <>{children}</>;
 };

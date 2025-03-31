@@ -10,7 +10,7 @@ const CaptainSignup = () => {
   const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { captain, setCaptain } = useContext(CaptainDataContext);
+  const {setCaptain } = useContext(CaptainDataContext);
   const [color, setColor] = useState("");
   const [plate, setPlate] = useState("");
   const [capacity, setCapacity] = useState("");

@@ -1,14 +1,46 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { IoMdArrowBack } from "react-icons/io";
 import { Link } from "react-router-dom";
 import Logo from "../components/Logo";
 import CaptainDetails from "../components/CaptainDetails";
-import RidePopUp  from "../components/RidePopUp";
+import RidePopUp from "../components/RidePopUp";
 import { ConfirmRidePopUp } from "../components/ConfirmRidePopUp";
+import { CaptainDataContext } from "../context/CaptainContext";
+import { SocketContext } from "../context/SocketContext";
 
 const CaptainHome = () => {
   const [ridePopUp, setRidePopUp] = useState(true);
-  const [confirmRidePopUp, setConfirmRidePopUp] = useState(false)
+  const [confirmRidePopUp, setConfirmRidePopUp] = useState(false);
+  const { socket } = useContext(SocketContext);
+  const {captain} = useContext(CaptainDataContext)
+  
+  useEffect(() => {
+    if (!captain?._id) return;
+  
+    socket.emit("join", { userType: "captain", userId: captain._id });
+  
+    const updateLocation = () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+          const locationData = {
+            userId: captain._id,
+            location: {
+              ltd: position.coords.latitude,
+              lng: position.coords.longitude,
+            },
+          };
+          console.log("Sending location data:", locationData);
+          socket.emit("update-location-captain", locationData);
+        });
+      }
+    };
+  
+    const locationInterval = setInterval(updateLocation, 10000);
+    updateLocation();
+  
+    return () => clearInterval(locationInterval);
+  }, [captain]);
+  
   return (
     <div className="relative h-screen w-full flex flex-col overflow-hidden bg-gray-100">
       {/* Header */}
@@ -29,9 +61,16 @@ const CaptainHome = () => {
       </div>
 
       {/* Ride Details Section */}
-      <CaptainDetails/>
-      <RidePopUp ridePopUp={ridePopUp} setRidePopUp={setRidePopUp} setConfirmRidePopUp={setConfirmRidePopUp}/>
-      <ConfirmRidePopUp confirmRidePopUp={confirmRidePopUp} setConfirmRidePopUp={setConfirmRidePopUp}/>
+      <CaptainDetails />
+      <RidePopUp
+        ridePopUp={ridePopUp}
+        setRidePopUp={setRidePopUp}
+        setConfirmRidePopUp={setConfirmRidePopUp}
+      />
+      <ConfirmRidePopUp
+        confirmRidePopUp={confirmRidePopUp}
+        setConfirmRidePopUp={setConfirmRidePopUp}
+      />
     </div>
   );
 };

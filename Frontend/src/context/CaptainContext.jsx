@@ -1,9 +1,14 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useState, useEffect } from "react";
 
 export const CaptainDataContext = createContext();
 
-const CaptainContext = ({children}) => {
-  const [captain, setCaptain] = useState(null);
+const CaptainContext = ({ children }) => {
+  const [captain, setCaptain] = useState(() => {
+    // Load captain data from localStorage on initialization
+    const storedCaptain = localStorage.getItem("captain");
+    return storedCaptain ? JSON.parse(storedCaptain) : null;
+  });
+
   const [isLoading, setIsLoading] = useState(null);
   const [error, setError] = useState(null);
 
@@ -12,12 +17,20 @@ const CaptainContext = ({children}) => {
   const [capacity, setCapacity] = useState(1);
   const [vehicletype, setVehicletype] = useState("car");
 
-  const updateCaptain = (captainData)=>{
+  const updateCaptain = (captainData) => {
+    setCaptain(captainData);
+  };
 
-    setCaptain(captainData)
-  }
+  // Persist captain data to localStorage whenever it changes
+  useEffect(() => {
+    if (captain) {
+      localStorage.setItem("captain", JSON.stringify(captain));
+    } else {
+      localStorage.removeItem("captain");
+    }
+  }, [captain]);
 
-  const value= {
+  const value = {
     captain,
     setCaptain,
     isLoading,
@@ -32,8 +45,8 @@ const CaptainContext = ({children}) => {
     capacity,
     setCapacity,
     vehicletype,
-    setVehicletype
-  }
+    setVehicletype,
+  };
 
   return (
     <CaptainDataContext.Provider value={value}>

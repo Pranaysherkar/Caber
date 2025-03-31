@@ -7,7 +7,7 @@ import { UserDataContext } from "../context/UserContext";
 const UserLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [user,setUser]=useContext(UserDataContext)
+  const {setUser}=useContext(UserDataContext)
   const navigate = useNavigate();
 
   const submitHandler =async (e) => {
